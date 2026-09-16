@@ -53,8 +53,9 @@ class SafeExtractTests(unittest.TestCase):
             self.assertEqual((extract_path / "site/index.html").read_text(), "safe")
 
     def test_rejects_invalid_zip(self):
-        with tempfile.TemporaryDirectory() as directory, self.assertRaisesRegex(
-            ValueError, "Bad zip file"
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            self.assertRaisesRegex(ValueError, "Bad zip file"),
         ):
             safe_extract(
                 io.BytesIO(b"not a zip"),
@@ -68,8 +69,9 @@ class SafeExtractTests(unittest.TestCase):
             zip_file.writestr("site/index.html", "12345")
         archive.seek(0)
 
-        with tempfile.TemporaryDirectory() as directory, self.assertRaisesRegex(
-            ValueError, "too big"
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            self.assertRaisesRegex(ValueError, "too big"),
         ):
             safe_extract(
                 archive,
@@ -81,8 +83,9 @@ class SafeExtractTests(unittest.TestCase):
     def test_restores_working_directory_after_failure(self):
         original_directory = Path.cwd()
 
-        with tempfile.TemporaryDirectory() as directory, self.assertRaisesRegex(
-            ValueError, "Unknown file type"
+        with (
+            tempfile.TemporaryDirectory() as directory,
+            self.assertRaisesRegex(ValueError, "Unknown file type"),
         ):
             safe_extract(io.BytesIO(), Path(directory), archive_type="rar")
 
